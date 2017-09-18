@@ -1,15 +1,18 @@
 #!/bin/bash
 
-home=$(pwd)
-app_dir=../turks
+home="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+project=$1
 
-cd $app_dir
-#git pull origin dev
-#bundle install
-#rake db:migrate
-#rake db:test:prepare
-rspec spec -t unstable -f json -o rspec.out 
+while true; do 
+  cd $project
+  git pull origin dev
+  bundle install
+  yarn
+  bundle exec rake db:test:prepare
+  RAILS_ENV=test bundle exec rspec spec -f json -o rspec.out
 
-cd $home
-./flake.rb $app_dir/rspec.out
-rm $app_dir/rspec.out
+  cd $home
+  ./inspector.rb $project/rspec.out
+  rm $project/rspec.out
+  sleep 5
+done
