@@ -26,9 +26,9 @@ class Report
 
   def run_summary
     Slack::Subject.new(
+      "There have been #{failures.pluck(:spec_run_id).uniq.count} spec runs since the last report",
       '',
-      '',
-      "There have been #{failures.pluck(:spec_run_id).uniq.count} spec runs since the last report"
+      ''
     )
   end
 
