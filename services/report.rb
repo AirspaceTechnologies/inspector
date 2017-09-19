@@ -1,10 +1,11 @@
 class Report
   def close
-    SpecRun.where(reported_at: nil).update_all(reported_at: Time.now)
+    SpecRun.unreported.update_all(reported_at: Time.now)
   end
 
   def write!
-    Slack.notify!(flaky_summary.unshift(expired_summary).unshift(run_summary))
+    report = flaky_summary.unshift(expired_summary).unshift(run_summary).compact
+    Slack.notify!(report)
   end
 
   private
@@ -26,13 +27,15 @@ class Report
 
   def run_summary
     Slack::Subject.new(
-      "There have been #{failures.pluck(:spec_run_id).uniq.count} spec runs since the last report",
+      "There have been #{SpecRun.unreported.count} spec runs since the last report, and #{failures.count} failures",
       '',
       ''
     )
   end
 
   def expired_summary
+    return if expired.count.zero?
+
     Slack::Subject.new(
       "Execution expired on #{expired.count} specs",
       '',
