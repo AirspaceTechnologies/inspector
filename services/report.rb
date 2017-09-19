@@ -4,7 +4,7 @@ class Report
   end
 
   def write!
-    Slack.notify!(flaky_summary.unshift(expired_summary))
+    Slack.notify!(flaky_summary.unshift(expired_summary).unshift(run_summary))
   end
 
   private
@@ -22,6 +22,14 @@ class Report
 
   def expired
     @expired ||= failures.execution_expired.to_a
+  end
+
+  def run_summary
+    Slack::Subject.new(
+      '',
+      '',
+      "There have been #{failures.pluck(:spec_run_id).uniq.count} spec runs since the last report"
+    )
   end
 
   def expired_summary
