@@ -57,11 +57,12 @@ class Report
   end
 
   def error_info_for(failure)
-    backtrace = failure.exception['backtrace'].find { |trace| trace.include?('PackageTracker') }
+    backtrace = failure.exception['backtrace']&.find { |trace| trace.include?('PackageTracker') }
     [ failure.exception['message'], format_backtrace(backtrace) ].join("\n")
   end
 
   def format_backtrace(trace)
+    return '' unless trace
     ndx = trace.index('PackageTracker')
     trace[(trace.index('/', ndx) + 1)..-1]
   end
