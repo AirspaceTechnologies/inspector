@@ -14,11 +14,11 @@ class RunSummary
   private
 
   def title
-    "There have been #{unreported.count} spec runs since the last report."
+    "There were #{unreported.count} spec runs since the last report."
   end
 
   def body
     success_count = unreported.select{|run| run.success? }.count
-    "#{success_count} were successful. The others accumulated #{failures.count} failed tests."
+    "#{success_count} were successful. #{failures.count} tests failed."
   end
 end
