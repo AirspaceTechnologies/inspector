@@ -18,7 +18,7 @@ class ExpiredSummary
   end
 
   def body
-    groups.each { |file_id, exps| "#{file_id} (#{exps.count}x)" }.join("\n")
+    groups.map { |file_id, exps| "#{file_id} (#{exps.count}x)" }.join("\n")
   end
 
   def groups

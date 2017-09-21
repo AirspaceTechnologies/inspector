@@ -13,7 +13,7 @@ class Report
   private
 
   def unreported
-    Spec.unreported.to_a
+    SpecRun.unreported.to_a
   end
 
   def failures

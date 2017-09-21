@@ -8,16 +8,17 @@ class RunSummary
   end
 
   def generate
-    Slack::Subject.new(title, '', '')
+    Slack::Subject.new(title, '', body)
   end
 
   private
 
   def title
-    """
-      There have been #{unreported.count} spec runs since the last report.
-      #{unreported.select{|run| run.success? }.count} were successful.
-      The others accumulated #{failures.count} failed tests.
-    """
+    "There have been #{unreported.count} spec runs since the last report."
+  end
+
+  def body
+    success_count = unreported.select{|run| run.success? }.count
+    "#{success_count} were successful. The others accumulated #{failures.count} failed tests."
   end
 end
