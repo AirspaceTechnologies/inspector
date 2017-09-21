@@ -19,6 +19,6 @@ class RunSummary
 
   def body
     success_count = unreported.select{|run| run.success? }.count
-    "#{success_count} were successful. #{failures.count} tests failed."
+    "#{success_count} were successful. #{failures.count} test#{failures.count == 1 ? '' : 's'} failed."
   end
 end
